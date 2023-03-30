@@ -57,7 +57,7 @@ void ClassList::add(ClassesPtr f, int index) {
 
 void ClassList::remove(int index) {
     if (index < 0 || _size <= index) {
-        throw runtime_error("[ClassList::remove] Capacity is reached.");
+        throw runtime_error("[ClassList::remove] Index not found.");
     }
     auto* new_classes = new ClassesPtr[_size - 1];
 

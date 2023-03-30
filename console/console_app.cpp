@@ -17,7 +17,7 @@ void printMenu()
     cout << "Выберите действие:";
 }
 
-inline std::ostream& operator<<(std::ostream& os, const ClassType& type)
+std::ostream& operator<<(std::ostream& os, const ClassType& type)
 {
     switch (type)
     {
@@ -37,6 +37,27 @@ inline std::ostream& operator<<(std::ostream& os, const ClassType& type)
     return os;
 }
 
+ClassesPtr read_new_class() {
+    string name;
+    int hours;
+    int temp;
+    cout << endl;
+    cout << "Введите название  : ";
+    getchar();
+    getline(cin, name);
+    cout << "Введите часы элемент  : ";
+    cin >> hours;
+    ClassType type;
+    cout << "Введите тип элемент (0 - Lekture, 1 - Practice, 2 - Lab) : ";
+    cin >> temp;
+    if (temp == 0)
+        type = ClassType::Lekture;
+    else if (temp == 1)
+        type = ClassType::Practice;
+    else
+        type = ClassType::Lab;
+    return new Classes(name, hours, type);
+}
 
 int main()
 {
@@ -56,60 +77,24 @@ int main()
         {
             system("cls");
             int n = 0;
-            cout << "Введите каличество элементов: ";
+            cout << "Введите количество элементов: ";
             cin >> n;
             for (int i = 0; i < n; i++)
             {
-                string name;
-                int hours;
-                int temp;
-                cout << endl;
-                cout << "Введите название элемент " << i + 1 << " : ";
-                getchar();
-                getline(cin, name);
-                cout << "Введите часы элемент " << i + 1 << " : ";
-                cin >> hours;
-                ClassType type;
-                cout << "Введите тип элемент " << i + 1 << " (0 - Lekture, 1 - Practice, 2 - Lab) : ";
-                cin >> temp;
-                if (temp == 0)
-                    type = ClassType::Lekture;
-                else if (temp == 1)
-                    type = ClassType::Practice;
-                else
-                    type = ClassType::Lab;
-                ClassesPtr newClass = new Classes(name, hours, type);
-                list.add(newClass);
+                cout << "Введите элемент " << i + 1 << " : ";
+                list.add(read_new_class());
                 cout << endl;
             }
             break;
         }
         case 2:
         {
-            string name;
-            int hours;
-            int temp;
-            system("cls");
-            cout << "Введите название: ";
-            getchar();
-            getline(cin, name);
-            cout << "Введите часы: ";
-            cin >> hours;
-            ClassType type;
-            cout << "Введите тип (0-Lekture, 1-Practice, 2-Lab): ";
-            cin >> temp;
-            if (temp == 0)
-                type = ClassType::Lekture;
-            else if (temp == 1)
-                type = ClassType::Practice;
-            else
-                type = ClassType::Lab;
-            ClassesPtr newClass = new Classes(name, hours, type);
-
+            ClassesPtr newClass = read_new_class();
             int index;
             cout << "Введите индекс: ";
             cin >> index;
             list.add(newClass, index);
+
             break;
         }
         case 3:
@@ -119,6 +104,7 @@ int main()
             cout << "Введите индекс: ";
             cin >> index;
             list.remove(index);
+            cout <<endl<< "Элемент успешно удален! "<<endl;
             break;
         }
         case 4:
@@ -127,29 +113,24 @@ int main()
             cout << "       СПИСОК      " << endl;
             for (int i = 0; i < list.size(); ++i)
             {
-                ClassesPtr currentClass = list[i];
-                cout << left << setw(10) << currentClass->get_name();
-                cout << left << setw(5) << currentClass->get_hours();
-                cout << left << setw(15) << currentClass->get_type() << endl;;
+                cout << left << setw(10) << list[i]->get_name();
+                cout << left << setw(5) << list[i]->get_hours();
+                cout << left << setw(15) << list[i]->get_type() << endl;;
             }
-
             break;
         }
         case 5:
         {
             system("cls");
+            int temp = 0;
             cout << "Введите название класса для поиска: ";
             getchar();
             getline(cin, searchName);
-            for (int i = 0; i < list.size(); ++i)
-            {
-                if (searchName == list[i]->get_name())
-                {
-                    cout << "Total hours for " << searchName << " class: " << list.calc_total(searchName, groupInfo) << endl;
-                    break;
-                }
-            }
-            cout << "Не найдено!";
+            int total_hours = list.calc_total(searchName, groupInfo);
+            if (total_hours == 0)
+                cout << "Не найдено!";
+            else 
+                cout << "Total hours for " << searchName << " class: " << total_hours << endl;
             break;
         }
         case 0:

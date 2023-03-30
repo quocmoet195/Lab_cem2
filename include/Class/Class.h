@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+
 using namespace std;
 namespace ClassStu {
 
@@ -57,6 +58,8 @@ namespace ClassStu {
         int calc_total(const string class_name, const InfoGroupCounts& groupInfo);
         string name_of_max_value(const InfoGroupCounts& groupInfo);
     };
+
+
 }
 
 

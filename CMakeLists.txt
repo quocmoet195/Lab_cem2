@@ -23,17 +23,20 @@ FetchContent_Declare(googletest URL https://github.com/google/googletest/archive
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# Объявляем библиотеку
+# Объявляем библиотеку . основня логика 
 add_library(Class-v1 SHARED
     "include/Class/Class.h"
     "src/Class.cpp"
-    "src/Class_list.cpp"
- "src/console_app.cpp")
+    "src/Class_list.cpp")
 target_include_directories(Class-v1 PUBLIC "include")
 
 # Объявляем тесты
 add_executable(Class-v1-tests
     "test/Class_list_tests.cpp"
-    "test/Class_tests.cpp"
- "src/console_app.cpp")
+    "test/Class_tests.cpp")
 target_link_libraries(Class-v1-tests Class-v1 GTest::gtest_main)
+
+# Объявляем 
+add_executable(Class-v1-console
+ "console/console_app.cpp")
+target_link_libraries(Class-v1-console Class-v1)
