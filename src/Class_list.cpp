@@ -10,7 +10,7 @@ ClassList::ClassList(const ClassList& other) {
     _classes = new ClassesPtr[other._size];
     _size = other._size;
     for (int i = 0; i < _size; ++i) {
-        _classes[i] = new Classes(other[i]->get_name(), other[i]->get_hours(), other[i]->get_type());//Classes::newClass(other[i]->get_name(), other[i]->get_hours(), other[i]->get_type());;
+        _classes[i] = new Classes(other[i]->get_name(), other[i]->get_hours(), other[i]->get_type());
     }
 }
 

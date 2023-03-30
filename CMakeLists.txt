@@ -28,12 +28,12 @@ add_library(Class-v1 SHARED
     "include/Class/Class.h"
     "src/Class.cpp"
     "src/Class_list.cpp"
-)
+ "src/console_app.cpp")
 target_include_directories(Class-v1 PUBLIC "include")
 
 # Объявляем тесты
 add_executable(Class-v1-tests
     "test/Class_list_tests.cpp"
     "test/Class_tests.cpp"
-)
+ "src/console_app.cpp")
 target_link_libraries(Class-v1-tests Class-v1 GTest::gtest_main)
