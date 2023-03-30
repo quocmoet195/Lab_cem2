@@ -48,7 +48,7 @@ namespace ClassStu {
         ClassList();
         ClassList(const ClassList& other);
         int size() const;
-        Classes operator[](int index) const;
+        ClassesPtr operator[](int index) const;
         void add(ClassesPtr f);
         void add(ClassesPtr f, int index);
         void remove(int index);
