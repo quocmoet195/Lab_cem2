@@ -22,6 +22,9 @@ namespace ClassStu {
 
     };
 
+    class Classes;
+    using ClassesPtr = Classes*;
+
     class Classes
     {
     private:
@@ -38,18 +41,19 @@ namespace ClassStu {
     };
 
     class ClassList {
-    public:
-        static const int CAPACITY = 10;
     private:
-        Classes _classes[CAPACITY];
+        ClassesPtr* _classes;
         int _size;
     public:
         ClassList();
+        ClassList(const ClassList& other);
         int size() const;
         Classes operator[](int index) const;
-        void add(Classes f);
+        void add(ClassesPtr f);
+        void add(ClassesPtr f, int index);
         void remove(int index);
         void swap(ClassList& other);
+        ~ClassList();
         int calc_total(const string class_name, const InfoGroupCounts& groupInfo);
         string name_of_max_value(const InfoGroupCounts& groupInfo);
     };
