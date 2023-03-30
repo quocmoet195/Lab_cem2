@@ -25,6 +25,16 @@ void ClassList::add(const Classes f) {
     ++_size;
 }
 
+void ClassList::remove(int index) {
+    if (index < 0 || _size <= index) {
+        throw runtime_error("[ClassList::remove] Index not found.");
+    }
+    for (int i = index; i < _size - 1; i++)
+    {
+        _classes[i] = _classes[i + 1];
+    }
+    _size--;
+}
 
 void ClassList::swap(ClassList& other) {
     std::swap(this->_classes, other._classes);

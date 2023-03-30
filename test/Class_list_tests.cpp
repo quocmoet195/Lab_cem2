@@ -4,6 +4,14 @@
 using namespace std;
 using namespace ClassStu;
 
+TEST(FunctionListTests, CapacityCheck) {
+    ClassList classes;
+    auto f = Classes::Classes("OOP", 8, ClassType::Lekture);
+    for (int i = 0; i < ClassList::CAPACITY; ++i) {
+        classes.add(f);
+    }
+    ASSERT_ANY_THROW(classes.add(f));
+}
 
 TEST(CalcTotal, NoResult) {
     ClassList classes;
