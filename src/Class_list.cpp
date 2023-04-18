@@ -31,10 +31,6 @@ void ClassList::add(ClassesPtr const f) {
     for (int i = 0; i < _size; ++i) {
         new_classes[i] = _classes[i];
     }
-    new_classes[_size] = f;
-
-    delete[] _classes;
-    _classes = new_classes;
 
     ++_size;
 }

@@ -26,8 +26,7 @@ namespace ClassStu {
     class Classes;
     using ClassesPtr = Classes*;
 
-    class Classes
-    {
+    class ItemClass {
     private:
         string _name;
         int _hours;

@@ -113,9 +113,7 @@ int main()
             cout << "       СПИСОК      " << endl;
             for (int i = 0; i < list.size(); ++i)
             {
-                cout << left << setw(10) << list[i]->get_name();
-                cout << left << setw(5) << list[i]->get_hours();
-                cout << left << setw(15) << list[i]->get_type() << endl;;
+                list[i]->print(cout, groupInfo);
             }
             break;
         }
