@@ -1,5 +1,6 @@
 #include <Class/Class.h>
 #include <stdexcept>
+#include <string>
 
 using namespace ClassStu;
 using namespace std;
@@ -7,10 +8,10 @@ using namespace std;
 ClassList::ClassList() : _classes(nullptr), _size(0) { }
 
 ClassList::ClassList(const ClassList& other) {
-    _classes = new ClassesPtr[other._size];
+    _classes = new ItemClassPtr[other._size];
     _size = other._size;
     for (int i = 0; i < _size; ++i) {
-        _classes[i] = new Classes(other[i]->get_name(), other[i]->get_hours(), other[i]->get_type());
+        _classes[i] = other._classes[i]->clone();
     }
 }
 
@@ -18,25 +19,29 @@ int ClassList::size() const {
     return _size;
 }
 
-ClassesPtr ClassList::operator[](const int index) const {
+ItemClassPtr ClassList::operator[](const int index) const {
     if (index < 0 || _size <= index) {
         throw out_of_range("[ClassList::operator[]] Index is out of range.");
     }
     return _classes[index];
 }
 
-void ClassList::add(ClassesPtr const f) {
-    auto new_classes = new ClassesPtr[_size + 1];
+void ClassList::add(ItemClassPtr const f) {
+    auto new_classes = new ItemClassPtr[_size + 1];
 
     for (int i = 0; i < _size; ++i) {
         new_classes[i] = _classes[i];
     }
+    new_classes[_size] = f;
+
+    delete[] _classes;
+    _classes = new_classes;
 
     ++_size;
 }
 
-void ClassList::add(ClassesPtr f, int index) {
-    auto new_classes = new ClassesPtr[_size + 1];
+void ClassList::add(ItemClassPtr f, int index) {
+    auto new_classes = new ItemClassPtr[_size + 1];
 
     for (int i = 0; i < index; ++i) {
         new_classes[i] = _classes[i];
@@ -55,7 +60,7 @@ void ClassList::remove(int index) {
     if (index < 0 || _size <= index) {
         throw runtime_error("[ClassList::remove] Index not found.");
     }
-    auto* new_classes = new ClassesPtr[_size - 1];
+    auto* new_classes = new ItemClassPtr[_size - 1];
 
     for (int i = 0; i < index; i++) {
         new_classes[i] = _classes[i];
@@ -76,9 +81,6 @@ void ClassList::swap(ClassList& other) {
 }
 
 ClassList::~ClassList() {
-    for (int i = 0; i < _size; ++i) {
-        delete _classes[i];
-    }
     delete[] _classes;
 }
 

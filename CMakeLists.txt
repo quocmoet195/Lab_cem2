@@ -25,7 +25,7 @@ FetchContent_MakeAvailable(googletest)
 
 # Объявляем библиотеку . основня логика 
 add_library(Class-v1 SHARED
-    "include/Class/Class.h"
+    "include/Class/Class"
     "src/Class.cpp"
     "src/Class_list.cpp")
 target_include_directories(Class-v1 PUBLIC "include")

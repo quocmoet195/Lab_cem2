@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <string>
+#include <iomanip>
 #include <stdexcept>
 
 using namespace ClassStu;
@@ -24,46 +25,78 @@ int InfoGroupCounts::get_num_groups() const
     return _numGroups;
 }
 
-Classes::Classes()
-{
-    _name = " ";
-    _hours = 0;
-    _type = ClassType::Lekture;
-};
+ItemClass::ItemClass() : _hours(0) {};
 
-Classes::Classes(const std::string name, const int hours, const ClassType type)
-{
-    _name = name;
-    _hours = hours;
-    _type = type;
-};
+ItemClass::ItemClass(std::string name, int hours) : _name(name), _hours(hours) {};
 
-string Classes::get_name()
+string ItemClass::get_name() const
 {
     return _name;
 }
 
-int Classes::get_hours()
+int ItemClass::get_hours() const
 {
     return _hours;
 }
 
-ClassType Classes::get_type() const {
-    return _type;
+
+ClassLecture::ClassLecture() : ItemClass("", 0) {};
+
+ClassLecture::ClassLecture(std::string name, int hours) : ItemClass(name, hours) {};
+
+unique_ptr<ItemClass> ClassLecture::clone() const
+{
+    return std::make_unique<ClassLecture>(*this);
+};
+
+int ClassLecture::calc_hours(const InfoGroupCounts& groupInfo) const
+{
+    return get_hours();
 }
 
-int Classes::calc_hours(const InfoGroupCounts& groupInfo)
+void ClassLecture::print(std::ostream& stream, const InfoGroupCounts& groupInfo) const
 {
-    switch (_type) {
-    case ClassType::Lekture:
-        return _hours;
-    case ClassType::Practice:
-        return groupInfo.get_num_groups() * _hours;
-    case ClassType::Lab:
-        return groupInfo.get_num_subgroups() * _hours;
-    default:
-        throw runtime_error("[Classes::compute_value] Invalid classes type.");
-    }
+    stream << left << setw(11) << "Lecture: " << left << setw(12) << get_name() << get_hours() << " hours" << std::endl;
+};
+
+ClassPractice::ClassPractice() : ItemClass("", 0) {};
+
+ClassPractice::ClassPractice(std::string name, int hours) : ItemClass(name, hours) {};
+
+unique_ptr<ItemClass> ClassPractice::clone() const
+{
+    return std::make_unique<ClassPractice>(*this);
+};
+
+int ClassPractice::calc_hours(const InfoGroupCounts& groupInfo) const
+{
+    return groupInfo.get_num_groups() * get_hours();
+}
+
+void ClassPractice::print(std::ostream& stream, const InfoGroupCounts& groupInfo) const
+{
+    stream << left << setw(11) << "Practice: " << left << setw(12) << get_name() << get_hours() << " hours" << std::endl;
+}
+
+
+
+ClassLab::ClassLab() : ItemClass("", 0) {};
+
+ClassLab::ClassLab(std::string name, int hours) : ItemClass(name, hours) {};
+
+unique_ptr<ItemClass> ClassLab::clone() const
+{
+    return std::make_unique<ClassLab>(*this);
+};
+
+int ClassLab::calc_hours(const InfoGroupCounts& groupInfo) const
+{
+    return groupInfo.get_num_subgroups() * get_hours();
+}
+
+void ClassLab::print(ostream& stream, const InfoGroupCounts& groupInfo) const
+{
+    stream << left << setw(11) << "Lab: " << left << setw(12) << get_name() << get_hours() << " hours" << std::endl;
 }
 
 

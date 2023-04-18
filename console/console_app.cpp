@@ -17,27 +17,8 @@ void printMenu()
     cout << "Выберите действие:";
 }
 
-std::ostream& operator<<(std::ostream& os, const ClassType& type)
-{
-    switch (type)
-    {
-    case ClassType::Lekture:
-        os << "Lecture";
-        break;
-    case ClassType::Practice:
-        os << "Practice";
-        break;
-    case ClassType::Lab:
-        os << "Lab";
-        break;
-    default:
-        os.setstate(std::ios_base::failbit);
-        break;
-    }
-    return os;
-}
 
-ClassesPtr read_new_class() {
+ItemClassPtr read_new_class() {
     string name;
     int hours;
     int temp;
@@ -47,16 +28,14 @@ ClassesPtr read_new_class() {
     getline(cin, name);
     cout << "Введите часы элемент  : ";
     cin >> hours;
-    ClassType type;
     cout << "Введите тип элемент (0 - Lekture, 1 - Practice, 2 - Lab) : ";
     cin >> temp;
     if (temp == 0)
-        type = ClassType::Lekture;
+        return make_unique<ClassLecture>(name, hours);
     else if (temp == 1)
-        type = ClassType::Practice;
+        return make_unique<ClassPractice>(name, hours);
     else
-        type = ClassType::Lab;
-    return new Classes(name, hours, type);
+        return make_unique<ClassLab>(name, hours);
 }
 
 int main()
@@ -89,7 +68,7 @@ int main()
         }
         case 2:
         {
-            ClassesPtr newClass = read_new_class();
+            ItemClassPtr newClass = read_new_class();
             int index;
             cout << "Введите индекс: ";
             cin >> index;
@@ -104,7 +83,7 @@ int main()
             cout << "Введите индекс: ";
             cin >> index;
             list.remove(index);
-            cout <<endl<< "Элемент успешно удален! "<<endl;
+            cout << endl << "Элемент успешно удален! " << endl;
             break;
         }
         case 4:
@@ -127,7 +106,7 @@ int main()
             int total_hours = list.calc_total(searchName, groupInfo);
             if (total_hours == 0)
                 cout << "Не найдено!";
-            else 
+            else
                 cout << "Total hours for " << searchName << " class: " << total_hours << endl;
             break;
         }
