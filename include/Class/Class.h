@@ -31,58 +31,53 @@ namespace ClassStu {
     public:
         ItemClass();
         ItemClass(const std::string name, const int hours);
-        virtual ~ItemClass() = default;
         std::string get_name() const;
         int get_hours() const;
         virtual int calc_hours(const InfoGroupCounts& groupInfo) const = 0;
         virtual std::unique_ptr<ItemClass> clone() const = 0;
-        virtual void print(std::ostream& stream, const InfoGroupCounts& groupInfo) const = 0;
+        virtual void print(std::ostream& stream) const = 0;
     };
 
     class ClassLecture : public ItemClass {
     public:
         ClassLecture();
         ClassLecture(string name = " ", int hours = 0);
-        ~ClassLecture() = default;
         std::unique_ptr<ItemClass> clone() const;
         int calc_hours(const InfoGroupCounts& groupInfo) const;
-        virtual void print(std::ostream& stream, const InfoGroupCounts& groupInfo) const;
+        virtual void print(std::ostream& stream) const;
     };
 
     class ClassPractice : public ItemClass {
     public:
         ClassPractice();
         ClassPractice(std::string name = " ", int hours = 0);
-        virtual ~ClassPractice() = default;
         virtual std::unique_ptr<ItemClass> clone() const override;
         int calc_hours(const InfoGroupCounts& groupInfo) const;
-        virtual void print(std::ostream& stream, const InfoGroupCounts& groupInfo) const;
+        virtual void print(std::ostream& stream) const;
     };
 
     class ClassLab : public ItemClass {
     public:
         ClassLab();
         ClassLab(string name = " ", int hours = 0);
-        virtual ~ClassLab() = default;
         virtual unique_ptr<ItemClass> clone() const override;
         int calc_hours(const InfoGroupCounts& groupInfo) const;
-        virtual void print(ostream& stream, const InfoGroupCounts& groupInfo) const;
+        virtual void print(ostream& stream) const;
     };
 
     class ClassList {
     private:
-        ItemClassPtr* _classes;
-        int _size;
+        vector<ItemClassPtr> _items;
     public:
-        ClassList();
+        ClassList() = default;
         ClassList(const ClassList& other);
         int size() const;
         ItemClassPtr operator[](int index) const;
         void add(ItemClassPtr f);
         void add(ItemClassPtr f, int index);
         void remove(int index);
+        void clear();
         void swap(ClassList& other);
-        ~ClassList();
         int calc_total(const string class_name, const InfoGroupCounts& groupInfo);
         string name_of_max_value(const InfoGroupCounts& groupInfo);
     };

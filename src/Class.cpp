@@ -54,7 +54,7 @@ int ClassLecture::calc_hours(const InfoGroupCounts& groupInfo) const
     return get_hours();
 }
 
-void ClassLecture::print(std::ostream& stream, const InfoGroupCounts& groupInfo) const
+void ClassLecture::print(std::ostream& stream) const
 {
     stream << left << setw(11) << "Lecture: " << left << setw(12) << get_name() << get_hours() << " hours" << std::endl;
 };
@@ -73,7 +73,7 @@ int ClassPractice::calc_hours(const InfoGroupCounts& groupInfo) const
     return groupInfo.get_num_groups() * get_hours();
 }
 
-void ClassPractice::print(std::ostream& stream, const InfoGroupCounts& groupInfo) const
+void ClassPractice::print(std::ostream& stream) const
 {
     stream << left << setw(11) << "Practice: " << left << setw(12) << get_name() << get_hours() << " hours" << std::endl;
 }
@@ -94,7 +94,7 @@ int ClassLab::calc_hours(const InfoGroupCounts& groupInfo) const
     return groupInfo.get_num_subgroups() * get_hours();
 }
 
-void ClassLab::print(ostream& stream, const InfoGroupCounts& groupInfo) const
+void ClassLab::print(ostream& stream) const
 {
     stream << left << setw(11) << "Lab: " << left << setw(12) << get_name() << get_hours() << " hours" << std::endl;
 }

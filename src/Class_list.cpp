@@ -1,96 +1,75 @@
 #include <Class/Class.h>
 #include <stdexcept>
-#include <string>
 
 using namespace ClassStu;
 using namespace std;
 
-ClassList::ClassList() : _classes(nullptr), _size(0) { }
-
 ClassList::ClassList(const ClassList& other) {
-    _classes = new ItemClassPtr[other._size];
-    _size = other._size;
-    for (int i = 0; i < _size; ++i) {
-        _classes[i] = other._classes[i]->clone();
+    for (int i = 0; i < other.size(); i++)
+    {
+        _items.push_back(other._items[i]->clone());
     }
+    /*std::transform(
+        other._items.begin(), 
+        other._items.end(), 
+        back_inserter(_items),
+        [](ItemClassPtr item) { return item->clone(); }
+    );*/
 }
 
-int ClassList::size() const {
-    return _size;
-}
+int ClassList::size() const
+{
+    return _items.size();
+};
 
 ItemClassPtr ClassList::operator[](const int index) const {
-    if (index < 0 || _size <= index) {
+    if (index < 0 || _items.size() <= index) {
         throw out_of_range("[ClassList::operator[]] Index is out of range.");
     }
-    return _classes[index];
+    return _items[index];
 }
 
-void ClassList::add(ItemClassPtr const f) {
-    auto new_classes = new ItemClassPtr[_size + 1];
-
-    for (int i = 0; i < _size; ++i) {
-        new_classes[i] = _classes[i];
-    }
-    new_classes[_size] = f;
-
-    delete[] _classes;
-    _classes = new_classes;
-
-    ++_size;
+void ClassList::add(ItemClassPtr f)
+{
+    _items.push_back(f);
 }
 
-void ClassList::add(ItemClassPtr f, int index) {
-    auto new_classes = new ItemClassPtr[_size + 1];
-
-    for (int i = 0; i < index; ++i) {
-        new_classes[i] = _classes[i];
+void ClassList::add(ItemClassPtr f, int index)
+{
+    if (index < 0 || _items.size() <= index) {
+        throw out_of_range("[ClassList::operator[]] Index is out of range.");
     }
-    new_classes[index] = f;
-    for (int i = index + 1; i < _size + 1; ++i) {
-        new_classes[i] = _classes[i - 1];
-    }
-    delete[] _classes;
-    _classes = new_classes;
-
-    ++_size;
+    _items.insert(_items.begin() + index, f);
 }
 
-void ClassList::remove(int index) {
-    if (index < 0 || _size <= index) {
-        throw runtime_error("[ClassList::remove] Index not found.");
+void ClassList::remove(int index)
+{
+    if (index < 0 || _items.size() <= index) {
+        throw out_of_range("[ClassList::operator[]] Index is out of range.");
     }
-    auto* new_classes = new ItemClassPtr[_size - 1];
+    _items.erase(_items.begin() + index);
+}
 
-    for (int i = 0; i < index; i++) {
-        new_classes[i] = _classes[i];
-    }
-    for (int i = index; i < _size - 1; i++) {
-        new_classes[i] = _classes[i + 1];
-    }
 
-    delete[] _classes;
-    _classes = new_classes;
-
-    _size--;
+void ClassList::clear()
+{
+    _items.clear();
 }
 
 void ClassList::swap(ClassList& other) {
-    std::swap(this->_classes, other._classes);
-    std::swap(this->_size, other._size);
+    std::swap(this->_items, other._items);
+    std::swap(this->_items, other._items);
 }
 
-ClassList::~ClassList() {
-    delete[] _classes;
-}
 
 int ClassList::calc_total(const string class_name, const InfoGroupCounts& groupInfo)
 {
+    int size = _items.size();
     int total = 0;
-    for (int i = 0; i < _size; ++i) {
-        if (class_name == _classes[i]->get_name())
+    for (int i = 0; i < size; ++i) {
+        if (class_name == _items[i]->get_name())
         {
-            total += _classes[i]->calc_hours(groupInfo);
+            total += _items[i]->calc_hours(groupInfo);
         }
     }
     return total;
@@ -98,18 +77,19 @@ int ClassList::calc_total(const string class_name, const InfoGroupCounts& groupI
 
 string ClassList::name_of_max_value(const InfoGroupCounts& groupInfo)
 {
-    if (_size == 0)
+    int size = _items.size();
+    if (size == 0)
         return string();
     int max_index = 0;
-    auto max_value = calc_total(_classes[0]->get_name(), groupInfo);
-    for (int i = 1; i < _size; ++i) {
+    auto max_value = calc_total(_items[0]->get_name(), groupInfo);
+    for (int i = 1; i < size; ++i) {
 
-        const auto value = calc_total(_classes[i]->get_name(), groupInfo);
+        const auto value = calc_total(_items[i]->get_name(), groupInfo);
         if (max_value < value) {
             max_index = i;
             max_value = value;
         }
     }
-    return _classes[max_index]->get_name();
+    return _items[max_index]->get_name();
 }
 
